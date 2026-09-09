@@ -1,0 +1,15 @@
+# Site settings
+title: 'DDRop'
+
+# Build settings
+markdown: kramdown
+theme: jekyll-theme-cayman
+plugins:
+  - jekyll-feed
+
+deployment: github
+
+exclude:
+  - serve.sh
+  - Gemfile
+  - Gemfile.lock
