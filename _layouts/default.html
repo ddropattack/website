@@ -20,8 +20,138 @@
   </head>
   <body>
 
+    
+    <div class="news-bar">
+      <ul>
+        <li>
+          <time datetime="2026-09-14">Sep '26</time>
+          <a href="#questions-and-answers"><i class="fa fa-bullhorn fa-fw news-icon" aria-hidden="true"></i> <strong>DDRop disclosed</strong> in coordination with Intel &amp; AMD</a>
+        </li>
+      </ul>
+    </div>
+   
+
+    <header class="page-header" role="banner">
+      {% if site.has_logo %}
+        <img class="header-logo" src="{{site.paper_logo}}">
+      {% endif %}
+      <h1 class="project-name">{{ site.title }}</h1>
+      <br/>
+      <h2 class="project-tagline">{{ site.subtitle }}</h2>
+      <div class="container">
+        {% if site.has_paper_link %}
+          <a href="{{ site.paper_link }}" class="btn btn-header btn-default fs-btn" role="button">
+            Read the paper<span class="mobile-break"> </span><i class="fa fa-download" aria-hidden="true"></i>
+          </a>
+        {% endif %}
+          <a class="btn btn-header" data-bs-toggle="collapse" href="#bibtex" role="button" aria-expanded="false" aria-controls="bibtex">Cite <span class="mobile-break"> </span><i class="fa fa-quote-right" aria-hidden="true"></i></a>
+          <a href="#questions-and-answers" class="btn btn-header">Q&amp;A <span class="mobile-break"> </span><i class="fas fa-question-circle" aria-hidden="true"></i></a>
+      </div>
+      {% raw %}
+      <div class="collapse bibtex-collapse" id="bibtex"><code class="card card-body">@inproceedings{ddrop26,
+  title     = {{DDRop}: Active Memory Interposer Attacks on Confidential {VMs} by Dropping {DDR5} Writes},
+  author    = {De Meulemeester, Jesse and Gloor, Stefan and Jattke, Patrick and Moghimi, Daniel and Oswald, David and Thompson, Martin and Razavi, Kaveh and Verbauwhede, Ingrid and Van Bulck, Jo},
+  booktitle = {Proceedings of the 2026 {ACM} {SIGSAC} Conference on Computer and Communications Security ({CCS} '26)},
+  publisher = {ACM},
+  year      = 2026,
+}</code></div>
+{% endraw %}</header>
+
     <main id="content" class="main-content" role="main">
       {{ content }}
+
+      <footer class="site-footer">
+        <span class="site-footer-credits">
+          <p>
+            This work was supported by the Internal Funds KU Leuven, the <a href="https://www.fwo.be/en/">Research Foundation &ndash; Flanders (FWO)</a>, and the <a href="https://cybersecurity-research.be/">Flemish Government (Cybersecurity Research Program)</a>.
+            In addition, this work is supported by the European Commission through Horizon 2020 (ERC #101020005 BELFORT).
+            This work was also partially funded by the Engineering and Physical Sciences Research Council (EPSRC) under grants EP/X03738X/1 and EP/X03738X/2.
+            Martin Thompson gratefully acknowledges the support of his employer, ZF Automotive UK Ltd, and the scholarships provided by the Universities of Birmingham and Durham.
+            Jesse De Meulemeester is funded by an FWO fellowship (11PFE24N).
+          </p>
+        </span>
+        <br>
+        <div>
+        <img class="footer-img img-fluid pe-4" src="assets/images/crpf.png">
+        <img class="footer-img img-fluid pe-4" src="assets/images/fwo_kleur.png">
+        <img class="footer-img img-fluid pe-4" src="assets/images/LOGO_ERC-FLAG_FP.png">
+        </div>
+      </footer>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Persist open accordion state across refreshes
+        const accordion = document.getElementById("accordionExample");
+        if (accordion) {
+          const collapseElements = accordion.querySelectorAll(".accordion-collapse");
+
+          function openAccordionItem(targetId) {
+            const targetEl = document.getElementById(targetId);
+            if (!targetEl) return;
+
+            collapseElements.forEach(col => {
+              if (col === targetEl) {
+                const bsCollapse = bootstrap.Collapse.getOrCreateInstance(col, { toggle: false });
+                bsCollapse.show();
+              } else {
+                const bsCollapse = bootstrap.Collapse.getInstance(col);
+                if (bsCollapse) {
+                  bsCollapse.hide();
+                } else {
+                  col.classList.remove('show');
+                  const btn = col.closest('.accordion-item')?.querySelector('.accordion-button');
+                  if (btn) {
+                    btn.classList.add('collapsed');
+                    btn.setAttribute('aria-expanded', 'false');
+                  }
+                }
+              }
+            });
+          }
+
+          // Restore saved state or URL hash
+          const currentHash = window.location.hash ? window.location.hash.substring(1) : null;
+          const savedAccordion = sessionStorage.getItem("ddrop_last_accordion");
+          const targetToOpen = (currentHash && document.getElementById(currentHash)?.classList.contains("accordion-collapse")) 
+            ? currentHash 
+            : savedAccordion;
+
+          if (targetToOpen && document.getElementById(targetToOpen)) {
+            openAccordionItem(targetToOpen);
+          }
+
+          // Track changes
+          collapseElements.forEach(col => {
+            col.addEventListener("shown.bs.collapse", () => {
+              sessionStorage.setItem("ddrop_last_accordion", col.id);
+            });
+            col.addEventListener("hidden.bs.collapse", () => {
+              const anyOpen = Array.from(collapseElements).some(el => el.classList.contains("show"));
+              if (!anyOpen) {
+                sessionStorage.removeItem("ddrop_last_accordion");
+              }
+            });
+          });
+        }
+
+        document.querySelectorAll(".accordion-trigger").forEach(link => {
+          link.addEventListener("click", (event) => {
+            event.preventDefault(); // Prevent default link navigation behavior
+            const target = document.querySelector(link.getAttribute("data-target")); // Get the target collapse element
+            const button = target.closest(".accordion-item").querySelector(".accordion-button");
+
+            // Simulate a button click to toggle the accordion
+            if (button) button.click();
+
+            // Scroll to the accordion item
+            const accordionItem = target.closest(".accordion-item");
+            if (accordionItem) accordionItem.scrollIntoView({ behavior: "smooth" });
+          });
+        });
+      });
+    </script>
+
+
     </body>
 </html>

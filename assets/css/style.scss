@@ -3,28 +3,46 @@
 
 @import "{{ site.theme }}";
 
+/* =========================================================================
+   DDRop identity — "sandstone".
+   A pale sandy header (black logo + near-black title) with warm bronze as
+   the accent — earthy and calm, deliberately away from red so callouts and
+   open accordion panels never read as error states.
+   (BadRAM = dark maroon/mauve, Battering RAM = teal, DDRop = sandstone.)
+   Note: accent CSS variables keep their historical --amber* names and now
+   hold the bronze palette; --sand-* drive the header gradient.
+   Genuine red/green status colors (vulnerable vs. mitigated) are kept as-is:
+   there they carry meaning rather than decoration.
+   ========================================================================= */
+
 :root {
-  --ink:        #3b2c1a;  
-  --graphite:   #2c2419;  
-  --slate:      #7a6a55;  
-  --amber:      #8f7857;  
-  --amber-deep: #6d5c42;  
-  --amber-wash: #faf7f2;  
+  --ink:        #3b2c1a;  /* deep umber: news bar, accordion titles */
+  --graphite:   #2c2419;  /* headings, strong text (warm near-black) */
+  --slate:      #7a6a55;  /* muted warm-taupe secondary text */
+  --amber:      #8f7857;  /* muted taupe-brown accent (shapes / borders / icons) */
+  --amber-deep: #6d5c42;  /* deep taupe-brown for text & links on white (6.4:1) */
+  --amber-wash: #faf7f2;  /* barely-there warm wash for cards / callouts */
   --rule:       rgba(60, 46, 26, 0.12);
   --rule-amber: rgba(143, 120, 87, 0.36);
 
-  --danger:       #a4574c;  
-  --danger-ink:   #8f4a41;  
-  --success:      #5f7d55;  
-  --success-ink:  #4e6b45;  
-  --caution:      #b5813c;  
+  /* Semantic status colors, deliberately desaturated so "vulnerable" and
+     "mitigated" stay legible next to the sand palette without shouting.
+     Tints are kept faint; the ink variants carry the meaning. */
+  --danger:       #a4574c;  /* muted terracotta */
+  --danger-ink:   #8f4a41;  /* on white, 5.9:1 */
+  --success:      #5f7d55;  /* muted sage */
+  --success-ink:  #4e6b45;  /* on white, 5.9:1 */
+  --caution:      #b5813c;  /* muted ochre */
   --caution-ink:  #8a5f22;
 
-  --sand-1: #f4ece0;  
-  --sand-2: #efe4d4;  
-  --sand-3: #e8dac6;  
-  --sand-4: #e0cfb7;  
-  --sand-5: #d6c2a6;  
+  /* Header field: a pale sandstone ramp. The logo is a solid-black glyph, so
+     the whole header stays light and the ink goes dark — title, tagline and
+     buttons are all near-black on sand (11-14:1) rather than white on brown. */
+  --sand-1: #f4ece0;  /* top — behind the logo */
+  --sand-2: #efe4d4;  /* logo lower half */
+  --sand-3: #e8dac6;  /* title */
+  --sand-4: #e0cfb7;  /* tagline */
+  --sand-5: #d6c2a6;  /* bottom — behind the buttons */
 }
 
 a {
@@ -32,7 +50,7 @@ a {
 }
 a:hover { color: #54462e; }
 
-
+/* The dots/bullets/indicators */
 .dot {
   cursor: pointer;
   height: 15px;
@@ -154,7 +172,7 @@ a:hover { color: #54462e; }
   }
 }
 
-
+/* Open state stays quiet: weight and ink carry it, not a colored panel. */
 .accordion-button:not(.collapsed) {
   background-color: #ffffff !important;
   color: var(--graphite) !important;
@@ -223,6 +241,95 @@ body {
   text-shadow: none;
 }
 
+/* Toggles whose hover underline belongs on the text alone, never on the
+   leading icon, the chevron, or a trailing badge. Wrap the words in .lbl. */
+.btn-demo,
+.link-label {
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+
+  &:hover .lbl,
+  &:focus .lbl {
+    text-decoration: underline;
+  }
+}
+
+.btn-demo {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--graphite);
+  background-color: rgba(60, 46, 26, 0.05);
+  border: 1px solid var(--rule);
+  border-radius: 0.4rem;
+  padding: 0.48rem 0.9rem;
+  margin-top: 0.35rem;
+  margin-bottom: 0.35rem;
+  text-decoration: none;
+  transition: all 0.18s ease;
+
+  &:hover {
+    background-color: var(--amber-wash);
+    color: var(--amber-deep);
+    border-color: var(--rule-amber);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+  }
+
+  &[aria-expanded="true"] {
+    background-color: var(--amber-wash);
+    color: var(--amber-deep);
+    border-color: var(--rule-amber);
+
+    .chevron-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  /* Which TDX integrity mode the case study applies to (LI / CI badge). */
+  .btn-demo-mode {
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    color: var(--amber-deep);
+    background: var(--amber-wash);
+    border: 1px solid var(--rule-amber);
+    border-radius: 0.25rem;
+    padding: 0.1rem 0.36rem;
+    white-space: nowrap;
+  }
+
+  .chevron-icon {
+    transition: transform 0.2s ease;
+    font-size: 0.78rem;
+  }
+
+  i:not(.chevron-icon) {
+    font-size: 0.85rem;
+  }
+}
+
+.case-study-card {
+  background: #ffffff;
+  border: 1px solid var(--rule);
+  border-radius: 0.5rem;
+  padding: 1.1rem;
+  margin-top: 0.6rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+
+  p:first-child {
+    margin-top: 0;
+    line-height: 1.55;
+    color: #3b404b;
+    font-size: 0.92rem;
+  }
+}
+
 .mobile-break {
   display: inline;
 }
@@ -244,7 +351,7 @@ body {
   font-weight: 500 !important;
 }
 
-
+/* Inline accent for the signature DDRop terms (used sparingly). */
 .drop-term {
   color: var(--amber-deep);
   font-weight: 600;
@@ -278,7 +385,7 @@ body {
   width: 100%;
 }
 
-
+/* FontAwesome section icon (freshness explainer, etc.) */
 .section-ico {
   font-size: 3.4rem;
   color: var(--amber-deep);
@@ -371,7 +478,10 @@ body {
   }
 }
 
-
+/* Header: a pale sandstone field that deepens slightly top-to-bottom, so the
+   black logo and the near-black text below it all sit on a light ground. The
+   stop positions track the header's stacking order (logo / title / tagline /
+   buttons) — retune them if that order or the logo size changes. */
 .page-header {
   background-color: var(--sand-3);
   border-bottom: 1px solid var(--rule-amber);
@@ -386,7 +496,7 @@ body {
       var(--sand-5) 100%
     );
 
-  
+  /* Mobile: the logo is 150px, so every text row moves up — pull the ramp up with it. */
   @media (max-width: 768px) {
     background-image:
       radial-gradient(560px 200px at 50% -10%, rgba(255, 255, 255, 0.50), rgba(255, 255, 255, 0) 70%),
@@ -427,7 +537,7 @@ body {
     color: var(--graphite);
     font-weight: 700;
   }
-  
+  /* Section headings (#### -> h4) get a short amber accent underline. */
   h4 {
     display: block;
     padding-bottom: 0.3rem;
@@ -448,7 +558,7 @@ body {
   text-align: justify;
 }
 
-
+/* Distinctive callout card for the "freshness" explainer. */
 .callout {
   text-align: left;
   background: var(--amber-wash);
@@ -464,7 +574,7 @@ body {
   margin-bottom: 0.35rem;
 }
 
-
+/* Landscape of low-cost interposer attacks: two lineages of cards. */
 .lineage { margin: 1.1rem 0 1.3rem; text-align: left; }
 .lineage-title {
   display: flex;
@@ -520,8 +630,10 @@ body {
   box-shadow: 0 3px 12px rgba(60, 46, 26, 0.10);
 }
 
-
-
+/* identity mark: project logo (our trilogy) or an FA stand-in (external works) */
+/* One band, one ink height. Every logo asset is trimmed to its own artwork
+   (no transparent padding), so a fixed height gives all marks — and the
+   Font Awesome glyph — the same visible size, centred in the band. */
 .chain .stage .smark {
   height: 56px;
   display: flex;
@@ -557,7 +669,7 @@ body {
   line-height: 1.35;
 }
 
-
+/* FontAwesome property chips */
 .chain .stage .props {
   display: flex;
   flex-wrap: wrap;
@@ -606,7 +718,7 @@ body {
   transition: opacity 0.5s ease-in-out;
 }
 
-
+/* Captions */
 .caption {
   flex: 1;
   text-align: left;
@@ -621,9 +733,11 @@ body {
   transition: background 0.7s ease;
 }
 
+/* =========================================================================
+   FAQ Visualizations & Responsive Enhancements
+   ========================================================================= */
 
-
-
+/* 1. Confidential Computing Threat Model Architecture */
 .cc-compare-wrapper {
   margin: 1.2rem 0;
 }
@@ -792,7 +906,7 @@ body {
   border: 1px solid rgba(95, 125, 85, 0.20);
 }
 
-
+/* Consistent Untrusted Host box in both diagrams */
 .arch-host {
   border-radius: 0.5rem;
   padding: 0.65rem 0.75rem;
@@ -827,7 +941,7 @@ body {
   margin-top: 0.2rem;
 }
 
-
+/* Green Positive Adopters Bar */
 .adopters-bar {
   background: rgba(95, 125, 85, 0.06);
   border: 1px solid rgba(95, 125, 85, 0.20);
@@ -874,7 +988,7 @@ body {
   color: var(--success-ink);
 }
 
-
+/* 2. Physical Threat Vectors Grid */
 .threat-grid {
   margin: 1.1rem 0;
 }
@@ -933,7 +1047,7 @@ body {
   flex: 1 0 auto;
 }
 
-
+/* 3. Freshness vs Encryption Breakdown & CPU-to-DIMM Journey */
 .mem-journey {
   margin: 1.15rem 0;
 }
@@ -1172,7 +1286,7 @@ body {
   border: 1px solid rgba(164, 87, 76, 0.18);
 }
 
-
+/* 4. Mitigations & Defenses Comparison */
 .mitigation-compare {
   margin: 1.1rem 0;
 }
@@ -1263,7 +1377,7 @@ body {
   color: var(--slate);
 }
 
-
+/* 5. Big-Picture Takeaway Cards */
 .takeaways-grid {
   margin: 1.1rem 0;
 }
